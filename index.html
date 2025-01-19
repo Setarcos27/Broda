@@ -67,40 +67,23 @@
     </footer>
 
     <script>
-        const sheetURL = "https://docs.google.com/spreadsheets/d/e/1_raqYMG1DzoT8rxlfUAJrSTa7mnD0Q77_vgbYiUGSPs/gviz/tq?tq=SELECT+A1";
+        const csvURL = "https://docs.google.com/spreadsheets/d/e/1_raqYMG1DzoT8rxlfUAJrSTa7mnD0Q77_vgbYiUGSPs/pub?output=csv";
 
-        // Función para obtener el valor del contador desde la celda A1
-        async function fetchCounter() {
-            try {
-                const response = await fetch(sheetURL);
-                const text = await response.text();
-                const match = text.match(/"c":\{"v":(\d+)/);
-                const counterValue = match ? parseInt(match[1]) : 0;
-                document.getElementById("counter").textContent = counterValue;
-                return counterValue;
-            } catch (error) {
-                console.error("Error al obtener el contador:", error);
-                document.getElementById("counter").textContent = "Error";
+async function fetchCounter() {
+    try {
+        const response = await fetch(csvURL);
+        const text = await response.text();
+        const rows = text.split("\n"); // Divide en filas
+        const counterValue = parseInt(rows[0].split(",")[0]); // Toma la celda A1
+        document.getElementById("counter").textContent = counterValue;
+        return counterValue;
+    } catch (error) {
+        console.error("Error al obtener el contador:", error);
+        document.getElementById("counter").textContent = "Error";
+    }
+}
 
-                
-                console.log(text); // Imprime el contenido de la respuesta
-
-            }
-        }
-
-        // Función para incrementar el contador
-        async function incrementCounter() {
-            const currentValue = await fetchCounter();
-            const newValue = currentValue + 1;
-
-            // Aquí deberías incluir la lógica para actualizar Google Sheets
-            alert("Recuerda que debes usar Google Apps Script o actualizar manualmente el valor en Sheets.");
-
-            document.getElementById("counter").textContent = newValue;
-        }
-
-        // Inicializar el contador
-        fetchCounter();
+fetchCounter();
     </script>
 </body>
 </html>
