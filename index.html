@@ -75,7 +75,7 @@
                 console.log("Respuesta completa:", text); // Para verificar
 
                 // Extraer el primer valor usando una expresión regular
-                const match = text.match(/"c":\{"v":(\d+)/);
+                const match = text.match(/"v":(\d+(\.\d+)?)/);
                 const counterValue = match ? parseInt(match[1]) : 0;
 
                 // Mostrar el valor en la página
