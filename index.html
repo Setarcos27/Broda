@@ -61,30 +61,34 @@
 </head>
 <body>
     <h1>Contador: <span id="counter">Cargando...</span></h1>
-    <button onclick="incrementCounter()">Incrementar</button>
     <footer>
-        Creado con ❤️ por <a href="https://github.com/Setarcos27" target="_blank">tuusuario</a>
+        Creado con ❤️ por <a href="https://github.com/tuusuario" target="_blank">tuusuario</a>
     </footer>
 
     <script>
-        const csvURL = "https://docs.google.com/spreadsheets/d/e/1_raqYMG1DzoT8rxlfUAJrSTa7mnD0Q77_vgbYiUGSPs/pub?output=csv";
+        const sheetURL = "https://docs.google.com/spreadsheets/d/e/1_raqYMG1DzoT8rxlfUAJrSTa7mnD0Q77_vgbYiUGSPs/gviz/tq?tq=SELECT+A";
 
-async function fetchCounter() {
-    try {
-        const response = await fetch(csvURL);
-        const text = await response.text();
-        const rows = text.split("\n"); // Divide en filas
-        const counterValue = parseInt(rows[0].split(",")[0]); // Toma la celda A1
-        document.getElementById("counter").textContent = counterValue;
-        return counterValue;
-    } catch (error) {
-        console.error("Error al obtener el contador:", error);
-        document.getElementById("counter").textContent = "Error";
-    }
-}
+        async function fetchCounter() {
+            try {
+                const response = await fetch(sheetURL);
+                const text = await response.text();
+                console.log("Respuesta completa:", text); // Para verificar
 
-fetchCounter();
+                // Extraer el primer valor usando una expresión regular
+                const match = text.match(/"c":\{"v":(\d+)/);
+                const counterValue = match ? parseInt(match[1]) : 0;
+
+                // Mostrar el valor en la página
+                document.getElementById("counter").textContent = counterValue;
+                return counterValue;
+            } catch (error) {
+                console.error("Error al obtener el contador:", error);
+                document.getElementById("counter").textContent = "Error";
+            }
+        }
+
+        // Inicializa la función al cargar la página
+        fetchCounter();
     </script>
 </body>
 </html>
- 
