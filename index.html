@@ -4,33 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contador Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: #61dafb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        #counter {
+            color: #21a1f1;
+            font-weight: bold;
+            font-size: 2.5rem;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #21a1f1;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a81c1;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #61dafb;
+        }
+
+        footer a {
+            color: #21a1f1;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>Contador: <span id="counter">Cargando...</span></h1>
     <button onclick="incrementCounter()">Incrementar</button>
+    <footer>
+        Creado con ❤️ por <a href="https://github.com/Setarcos27" target="_blank">tuusuario</a>
+    </footer>
 
     <script>
         const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRj2ccWyEQGgK-s2QFfvseeelTK99in0Kz1ezuD2nrH2Ph55w7ELd92Ru2IyWR7c-XSduGZqq5zQgRE/pubhtml";
 
+        // Función para obtener el valor del contador desde la celda A1
         async function fetchCounter() {
-            const response = await fetch(sheetURL);
-            const text = await response.text();
-            const match = text.match(/"c":\{"v":(\d+)/);
-            const counterValue = match ? parseInt(match[1]) : 0;
-            document.getElementById("counter").textContent = counterValue;
-            return counterValue;
+            try {
+                const response = await fetch(sheetURL);
+                const text = await response.text();
+                const match = text.match(/"c":\{"v":(\d+)/);
+                const counterValue = match ? parseInt(match[1]) : 0;
+                document.getElementById("counter").textContent = counterValue;
+                return counterValue;
+            } catch (error) {
+                console.error("Error al obtener el contador:", error);
+                document.getElementById("counter").textContent = "Error";
+            }
         }
 
+        // Función para incrementar el contador
         async function incrementCounter() {
             const currentValue = await fetchCounter();
             const newValue = currentValue + 1;
 
-            // Lógica para actualizar el valor en Google Sheets.
-            alert("Debes usar Google Apps Script o actualizar manualmente el valor en Sheets.");
+            // Aquí deberías incluir la lógica para actualizar Google Sheets
+            alert("Recuerda que debes usar Google Apps Script o actualizar manualmente el valor en Sheets.");
 
             document.getElementById("counter").textContent = newValue;
         }
 
+        // Inicializar el contador
         fetchCounter();
     </script>
 </body>
